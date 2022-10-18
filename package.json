@@ -1,0 +1,29 @@
+{
+  "name": "bloggista",
+  "version": "0.0.1",
+  "description": "Build and manage blogs tool",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "blog-build": "index.js"
+  },
+  "keywords": [
+    "Blogs",
+    "Tools"
+  ],
+  "author": "jhfgloria",
+  "license": "ISC",
+  "directories": {
+    "example": "example"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jhfgloria/bloggista.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jhfgloria/bloggista/issues"
+  },
+  "homepage": "https://github.com/jhfgloria/bloggista#readme"
+}
