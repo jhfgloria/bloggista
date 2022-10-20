@@ -1,106 +1,37 @@
 #!/usr/bin/env node
-
-const fs = require("fs");
-const path = require("path");
-
-const rootFolder = "./";
-const bloggistaRootFolder = findBloggistaProjectRoot(rootFolder);
-resetDistributionFolder(bloggistaRootFolder);
-
-const htmlTemplate = getTemplateFromConfig(bloggistaRootFolder);
-generateBlogEntries(path.resolve(bloggistaRootFolder) + "/content", htmlTemplate);
-
-function findBloggistaProjectRoot(baseFolder) {
-  if (hasReachedRootFolder(baseFolder)) {
-    throw Error("This command should be run from a bloggista project.")
-  }
-  
-  try {
-    const folderToCheck = path.resolve(baseFolder) + "/bloggista.json";
-    checkForFolder(folderToCheck);
-    
-    return baseFolder;
-
-  } catch (error) {
-    const parentFolder = path.resolve(baseFolder, "..");
-
-    return findBloggistaProjectRoot(parentFolder);
-  }
-}
-
-function checkForFolder(folderToCheck) {
-  fs.statSync(folderToCheck);
-}
-
-function hasReachedRootFolder(folderToCheck) {
-  return folderToCheck === "/";
-}
-
-// handle dist directory
-function resetDistributionFolder(bloggistaFolder) {
-  const distributionFolder = path.resolve(bloggistaFolder) + "/dist";
-  
-  try {
-    checkForFolder(distributionFolder);
-    fs.rmdirSync(distributionFolder, { recursive: true });
-  } catch (_) {
-    console.log("/dist folder does not exist yet");
-  } finally {
-    console.log("creating /dist folder", distributionFolder);
-    fs.mkdirSync(distributionFolder);
-  }
-}
-
-// get template from templating file
-function getTemplateFromConfig(bloggistaFolder) {
-  const htmlTemplate = path.resolve(bloggistaFolder) + "/config/index.html";
-
-  try {
-    const fileDescriptor = fs.openSync(htmlTemplate);
-    const content = fs.readFileSync(fileDescriptor, 'utf8');
-    fs.closeSync(fileDescriptor);
-
-    return content;
-
-  } catch (error) {
-    console.error(error, "The index.html file is missing from the config folder");
-  }
-}
-
-// generate blog entries
-function generateBlogEntries(bloggistaContentRootFolder, htmlTemplate) {
-  const currentDistribuitonFolder = bloggistaContentRootFolder.replace("/content", "/dist");
-  
-  try {
-    checkForFolder(currentDistribuitonFolder);
-  } catch (_) {
-    fs.mkdirSync(currentDistribuitonFolder);
-  }
-
-  const files = fs.readdirSync(bloggistaContentRootFolder, { withFileTypes: true });
-  
-  files.forEach(file => {
-    if (file.isDirectory()) {
-      generateBlogEntries(bloggistaContentRootFolder + `/${file.name}`, htmlTemplate);
-    } else if (file.name === ".keep") {
-      // ignore
-    } else {
-      generateFile(currentDistribuitonFolder, bloggistaContentRootFolder, file.name, htmlTemplate);
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
     }
-  });
-}
-
-function generateFile(destinationFolder, sourceFolder, filename, htmlTemplate) {
-  try {
-    const sourceFileDescriptor = fs.openSync(sourceFolder + `/${filename}`);
-    const content = fs.readFileSync(sourceFileDescriptor, 'utf8');
-    fs.closeSync(sourceFileDescriptor);
-
-    const parsedContent = htmlTemplate.replace("{{body}}", content);
-
-    fs.writeFileSync(destinationFolder + `/${filename}`, parsedContent);
-
-  } catch (error) {
-    console.error(error);
-  }
-}
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const commander_1 = require("commander");
+const Package = __importStar(require("./package.json"));
+const build_command_1 = require("./src/build-command");
+const program = new commander_1.Command();
+program.name('bloggista')
+    .description('Bloggista provides you a CLI to create and manage your blog')
+    .version(Package.version);
+program.command('build')
+    .description('Builds the entire blog structure into the dist folder')
+    .action(build_command_1.buildCommand);
+program.parse();
