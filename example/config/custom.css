@@ -1,0 +1,19 @@
+* {
+  font-family: 'Raleway', sans-serif;
+}
+
+body {
+  width: 70%;
+}
+
+.code {
+  width: 100%;
+  background-color: rgb(250, 238, 220);
+  color: rgb(76, 36, 7);
+  padding: 1rem;
+  overflow-x: auto;
+}
+
+.code > p {
+  margin: 0;
+}

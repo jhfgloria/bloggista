@@ -1,32 +1,19 @@
 import path from "path";
+import { Bloggista } from "./bloggista";
 import { File, Folder } from "./filesystem";
 
 export async function buildCommand(): Promise<void> {
+  const bloggista = new Bloggista();
   const rootFolder = "./";
-  const bloggistaRootFolder = await findBloggistaProjectRoot(rootFolder);
+  const bloggistaRootFolder = await bloggista.findRootFolder(rootFolder);
+
   await resetDistributionFolder(bloggistaRootFolder);
+  
   const htmlTemplateFile = await getTemplateFromConfig(bloggistaRootFolder);
   const template = await htmlTemplateFile.read()
+  
   const contentRootFolder = new Folder(path.resolve(bloggistaRootFolder.path) + "/content");
   await generateBlogEntries(contentRootFolder, template);
-}
-
-async function findBloggistaProjectRoot(basePath: string): Promise<Folder> {
-  const baseFolder = new Folder(basePath);
-
-  if (await baseFolder.isRootFolder()) {
-    throw Error("This command should be run from a bloggista project.")
-  }
-  
-  const pathToCheck = path.resolve(basePath) + "/bloggista.json";
-  const folderToCheck = new Folder(pathToCheck);
-
-  if (await folderToCheck.exists()) {
-    return new Folder(basePath);
-  }
-  
-  const parentFolder = path.resolve(basePath, "..")
-  return findBloggistaProjectRoot(parentFolder);
 }
 
 async function resetDistributionFolder(bloggistaFolder: Folder): Promise<void> {
@@ -58,7 +45,7 @@ async function generateBlogEntries(bloggistaContentRootFolder: Folder, htmlTempl
   const files = await bloggistaContentRootFolder.getFiles();
   const subdirectories = await bloggistaContentRootFolder.getSubdirectories();
   
-  await Promise.all(files.filter(f => f.name !== ".keep").map(f => generateFile(currentDistribuitonFolder, f, htmlTemplate)));
+  Promise.all(files.filter(f => f.name !== ".keep").map(f => generateFile(currentDistribuitonFolder, f, htmlTemplate)));
   await Promise.all(subdirectories.map(dir => generateBlogEntries(dir, htmlTemplate)));
 }
 

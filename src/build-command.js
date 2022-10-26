@@ -14,11 +14,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.buildCommand = void 0;
 const path_1 = __importDefault(require("path"));
+const bloggista_1 = require("./bloggista");
 const filesystem_1 = require("./filesystem");
 function buildCommand() {
     return __awaiter(this, void 0, void 0, function* () {
+        const bloggista = new bloggista_1.Bloggista();
         const rootFolder = "./";
-        const bloggistaRootFolder = yield findBloggistaProjectRoot(rootFolder);
+        const bloggistaRootFolder = yield bloggista.findRootFolder(rootFolder);
         yield resetDistributionFolder(bloggistaRootFolder);
         const htmlTemplateFile = yield getTemplateFromConfig(bloggistaRootFolder);
         const template = yield htmlTemplateFile.read();
@@ -27,21 +29,6 @@ function buildCommand() {
     });
 }
 exports.buildCommand = buildCommand;
-function findBloggistaProjectRoot(basePath) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const baseFolder = new filesystem_1.Folder(basePath);
-        if (yield baseFolder.isRootFolder()) {
-            throw Error("This command should be run from a bloggista project.");
-        }
-        const pathToCheck = path_1.default.resolve(basePath) + "/bloggista.json";
-        const folderToCheck = new filesystem_1.Folder(pathToCheck);
-        if (yield folderToCheck.exists()) {
-            return new filesystem_1.Folder(basePath);
-        }
-        const parentFolder = path_1.default.resolve(basePath, "..");
-        return findBloggistaProjectRoot(parentFolder);
-    });
-}
 function resetDistributionFolder(bloggistaFolder) {
     return __awaiter(this, void 0, void 0, function* () {
         const distributionPath = path_1.default.resolve(bloggistaFolder.path) + "/dist";
@@ -70,7 +57,7 @@ function generateBlogEntries(bloggistaContentRootFolder, htmlTemplate) {
         }
         const files = yield bloggistaContentRootFolder.getFiles();
         const subdirectories = yield bloggistaContentRootFolder.getSubdirectories();
-        yield Promise.all(files.filter(f => f.name !== ".keep").map(f => generateFile(currentDistribuitonFolder, f, htmlTemplate)));
+        Promise.all(files.filter(f => f.name !== ".keep").map(f => generateFile(currentDistribuitonFolder, f, htmlTemplate)));
         yield Promise.all(subdirectories.map(dir => generateBlogEntries(dir, htmlTemplate)));
     });
 }
