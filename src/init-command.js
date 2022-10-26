@@ -32,7 +32,7 @@ function initCommand(name) {
         const customCSSFile = new filesystem_1.File(path_1.default.resolve(configFolder.path + '/custom.css'));
         yield customCSSFile.write(customCSSTemplate);
         const exampleHTMLFile = new filesystem_1.File(path_1.default.resolve(contentFolder.path + '/index.html'));
-        yield exampleHTMLFile.write(HTMLTemplate(exampleHTMLTemplate));
+        yield exampleHTMLFile.write(exampleHTMLTemplate);
         const packageJSONFile = new filesystem_1.File(path_1.default.resolve(projectFolder.path + '/package.json'));
         yield packageJSONFile.write(packageJSONTemplate(name));
     });

@@ -24,7 +24,7 @@ export async function initCommand(name: string): Promise<void> {
   await customCSSFile.write(customCSSTemplate);
 
   const exampleHTMLFile = new File(path.resolve(contentFolder.path  + '/index.html'));
-  await exampleHTMLFile.write(HTMLTemplate(exampleHTMLTemplate));
+  await exampleHTMLFile.write(exampleHTMLTemplate);
 
   const packageJSONFile = new File(path.resolve(projectFolder.path + '/package.json'));
   await packageJSONFile.write(packageJSONTemplate(name));
