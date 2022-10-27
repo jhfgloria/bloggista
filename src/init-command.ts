@@ -3,36 +3,48 @@ import path from "path";
 import Package from "../package.json";
 
 export async function initCommand(name: string): Promise<void> {
-  const humanizedName = name.split(/[-_]/).map(s => s[0].toUpperCase() + s.slice(1)).join(' ');
-
-  const projectFolder = new Folder(path.resolve('./' + name));
-  await projectFolder.create();
-
-  const bloggistaJSON = new File(path.resolve(projectFolder.path + '/bloggista.json'));
-  await bloggistaJSON.write(JSONTemplate(humanizedName));
-
-  const contentFolder = new Folder(path.resolve(projectFolder.path  + '/content'));
-  await contentFolder.create();
-
-  const configFolder = new Folder(path.resolve(projectFolder.path  + '/config'));
-  await configFolder.create();
-
-  const indexFile = new File(path.resolve(configFolder.path  + '/index.html'));
-  await indexFile.write(HTMLTemplate(humanizedName));
-
-  const customCSSFile = new File(path.resolve(configFolder.path  + '/custom.css'));
-  await customCSSFile.write(customCSSTemplate);
-
-  const exampleHTMLFile = new File(path.resolve(contentFolder.path  + '/index.html'));
-  await exampleHTMLFile.write(exampleHTMLTemplate);
-
-  const packageJSONFile = new File(path.resolve(projectFolder.path + '/package.json'));
-  await packageJSONFile.write(packageJSONTemplate(name));
+  try {
+    const humanizedName = name.split(/[-_]/).map(s => s[0].toUpperCase() + s.slice(1)).join(' ');
+    
+    const projectFolder = new Folder(path.resolve('./' + name));
+    await projectFolder.create();
+    
+    const bloggistaJSON = new File(path.resolve(projectFolder.path + '/bloggista.json'));
+    const createdAt = new Date().toISOString();
+    await bloggistaJSON.write(JSONTemplate(humanizedName, createdAt));
+    
+    const contentFolder = new Folder(path.resolve(projectFolder.path  + '/content'));
+    await contentFolder.create();
+    
+    const configFolder = new Folder(path.resolve(projectFolder.path  + '/config'));
+    await configFolder.create();
+    
+    const indexFile = new File(path.resolve(configFolder.path  + '/index.html'));
+    await indexFile.write(HTMLTemplate(humanizedName));
+    
+    const customCSSFile = new File(path.resolve(configFolder.path  + '/custom.css'));
+    await customCSSFile.write(customCSSTemplate);
+    
+    const exampleHTMLFile = new File(path.resolve(contentFolder.path  + '/index.html'));
+    await exampleHTMLFile.write(exampleHTMLTemplate);
+    
+    const packageJSONFile = new File(path.resolve(projectFolder.path + '/package.json'));
+    await packageJSONFile.write(packageJSONTemplate(name));
+  } catch(error) {
+    console.error('Error:', error);
+    
+  }
 }
 
-const JSONTemplate = (name: string) => `{
+const JSONTemplate = (name: string, createdAt: string) => `{
   "name": "${name}",
   "posts": {
+    "index": {
+      "id": "index",
+      "name": "Home",
+      "relativePath": "index.html",
+      "createdAt": "${createdAt}"
+    }
   }
 }
 `;
@@ -67,4 +79,5 @@ const packageJSONTemplate = (name: string) => `{
   "dependencies": {
     "bloggista": "^${Package.version}"
   }
-}`;
+}
+`;
