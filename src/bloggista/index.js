@@ -31,5 +31,23 @@ class Bloggista {
             return this.findRootFolder(parentFolder);
         });
     }
+    configFile() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const bloggistaRoot = yield this.findRootFolder('.');
+            return new filesystem_1.File(path_1.default.resolve(bloggistaRoot.path, 'bloggista.json'));
+        });
+    }
+    config() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const bloggistaJSON = yield this.configFile();
+            const configuration = yield bloggistaJSON.read();
+            const JSONConfiguration = JSON.parse(configuration);
+            return {
+                version: JSONConfiguration.version,
+                name: JSONConfiguration.name,
+                posts: JSONConfiguration.posts,
+            };
+        });
+    }
 }
 exports.Bloggista = Bloggista;

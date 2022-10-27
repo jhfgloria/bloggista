@@ -1,5 +1,11 @@
 {
   "name": "Example",
   "posts": {
+    "20221027171715486-my_first_post": {
+      "id": "20221027171715486-my_first_post",
+      "name": "My First Post",
+      "relativePath": "blog/devlog/20221027171715486-my_first_post.html",
+      "createdAt": "2022-10-27T17:17:15.486Z"
+    }
   }
 }

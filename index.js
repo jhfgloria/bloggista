@@ -27,14 +27,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const commander_1 = require("commander");
 const Package = __importStar(require("./package.json"));
 const build_command_1 = require("./src/build-command");
+const create_post_command_1 = require("./src/create-post-command");
 const init_command_1 = require("./src/init-command");
 const program = new commander_1.Command();
 program.name('bloggista')
     .description('Bloggista provides you a CLI to create and manage your blog')
     .version(Package.version);
-program.command('init <name>')
+program.command('init')
+    .argument('<name>', 'Name of the blog folder (can\'t contain spaces)')
     .description('Creates the blog structure into given folder name')
     .action(init_command_1.initCommand);
+program.command('post')
+    .argument('<name>', 'Name of the blog post (can\'t contain spaces)')
+    .option('-p, --path <filePath>')
+    .description('Creates a blog post under a folder if one is given')
+    .action((name, { path }) => (0, create_post_command_1.createPostCommand)(name, path));
 program.command('build')
     .description('Builds the entire blog structure into the dist folder')
     .action(build_command_1.buildCommand);
