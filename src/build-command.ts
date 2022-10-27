@@ -3,17 +3,23 @@ import { Bloggista } from "./bloggista";
 import { File, Folder } from "./filesystem";
 
 export async function buildCommand(): Promise<void> {
-  const bloggista = new Bloggista();
-  const rootFolder = "./";
-  const bloggistaRootFolder = await bloggista.findRootFolder(rootFolder);
-
-  await resetDistributionFolder(bloggistaRootFolder);
-  
-  const htmlTemplateFile = await getTemplateFromConfig(bloggistaRootFolder);
-  const template = await htmlTemplateFile.read()
-  
-  const contentRootFolder = new Folder(path.resolve(bloggistaRootFolder.path) + "/content");
-  await generateBlogEntries(contentRootFolder, template);
+  try {
+    const bloggista = new Bloggista();
+    const rootFolder = "./";
+    const bloggistaRootFolder = await bloggista.findRootFolder(rootFolder);
+    
+    await resetDistributionFolder(bloggistaRootFolder);
+    
+    const htmlTemplateFile = await getTemplateFromConfig(bloggistaRootFolder);
+    const template = await htmlTemplateFile.read()
+    
+    const contentRootFolder = new Folder(path.resolve(bloggistaRootFolder.path) + "/content");
+    await generateBlogEntries(contentRootFolder, template);
+    
+    await copyCSSFiles(bloggistaRootFolder);
+  } catch (error) {
+    console.error('Error:', error);
+  }
 }
 
 async function resetDistributionFolder(bloggistaFolder: Folder): Promise<void> {
@@ -54,4 +60,11 @@ async function generateFile(destinationFolder: Folder, sourceFile: File, htmlTem
   const parsedContent = htmlTemplate.replace("{{body}}", content);
   const newFile = new File(`${destinationFolder.path}/${sourceFile.name}`);
   await newFile.write(parsedContent);
+}
+
+async function copyCSSFiles(bloggistaFolder: Folder): Promise<void> {
+  const configFolder = new Folder(path.resolve(bloggistaFolder.path, 'config'));
+  const distFolder = new Folder(path.resolve(bloggistaFolder.path, 'dist'));
+  const customCSSFile = new File(path.resolve(configFolder.path, 'custom.css'));
+  await customCSSFile.copyTo(distFolder);
 }

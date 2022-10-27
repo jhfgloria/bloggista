@@ -3,7 +3,6 @@
 import { Command } from "commander";
 
 import * as Package from "./package.json";
-import { Bloggista } from "./src/bloggista";
 import { buildCommand } from "./src/build-command";
 import { createPostCommand } from "./src/create-post-command";
 import { initCommand } from "./src/init-command";

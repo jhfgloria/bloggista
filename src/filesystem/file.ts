@@ -1,4 +1,5 @@
 import { Dirent } from "fs";
+import Path from "path";
 import fs from "fs/promises";
 import { FileSystem } from "./filesystem";
 import { Folder } from "./folder";
@@ -21,6 +22,10 @@ export class File extends FileSystem {
   public async write(data: string): Promise<void> {
     console.log("Been here", this.path);
     await fs.writeFile(this.path, data);
+  }
+
+  public async copyTo(destination: Folder): Promise<void> {
+    await fs.copyFile(this.path, Path.resolve(destination.path, this.name))
   }
 
   public static fromDirent(dirent: Dirent, parentFolder: Folder): File {
