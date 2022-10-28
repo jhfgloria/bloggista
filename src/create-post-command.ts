@@ -2,15 +2,16 @@ import Path from "path";
 import { Bloggista } from "./bloggista";
 import { File, Folder } from "./filesystem";
 
-export async function createPostCommand(fileName: string, relativeContentFolder: string) {
+export async function createPostCommand(fileName: string, relativeContentFolder?: string) {
   try {
     const bloggistaFolder = await (new Bloggista()).findRootFolder('.')
     const contentFolder = new Folder(Path.resolve(bloggistaFolder.path, 'content'));
-    await createRecursiveFolders(contentFolder, relativeContentFolder);
+    
+    if (relativeContentFolder) await createRecursiveFolders(contentFolder, relativeContentFolder);
 
     const createdAt = new Date().toISOString();
     const bloggistaFileName = `${createdAt.replace(/[-.:TZ]/g, '')}-${fileName}`;
-    const file = new File(Path.resolve(contentFolder.path, relativeContentFolder, `${bloggistaFileName}.html`));
+    const file = new File(Path.resolve(contentFolder.path, relativeContentFolder || '', `${bloggistaFileName}.html`));
     
     await file.write('<h1>Title</h1>\n\n<p>Start editing here</p>');
     const bloggistaConfig = await new Bloggista().config();
