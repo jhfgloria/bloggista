@@ -42,7 +42,7 @@ const JSONTemplate = (name: string, createdAt: string) => `{
     "index": {
       "id": "index",
       "name": "Home",
-      "relativePath": "index.html",
+      "relativePath": "/index.html",
       "createdAt": "${createdAt}"
     }
   }

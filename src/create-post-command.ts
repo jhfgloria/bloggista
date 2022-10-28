@@ -19,7 +19,7 @@ export async function createPostCommand(fileName: string, relativeContentFolder:
     bloggistaConfig.posts[bloggistaFileName] = {
       id: bloggistaFileName,
       name: fileName.split(/[-_]/).map(s => s[0].toUpperCase() + s.slice(1)).join(' '),
-      relativePath: Path.relative(bloggistaFolder.path + '/dist', file.path.replace('content', 'dist')),
+      relativePath: `/${Path.relative(bloggistaFolder.path + '/dist', file.path.replace('content', 'dist'))}`,
       createdAt,
     };
 

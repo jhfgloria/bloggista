@@ -4,8 +4,14 @@
     "index": {
       "id": "index",
       "name": "Home",
-      "relativePath": "index.html",
+      "relativePath": "/index.html",
       "createdAt": "2022-10-27T18:18:35.302Z"
+    },
+    "20221028182808141-hello-world": {
+      "id": "20221028182808141-hello-world",
+      "name": "Hello World",
+      "relativePath": "/tests/20221028182808141-hello-world.html",
+      "createdAt": "2022-10-28T18:28:08.141Z"
     }
   }
 }
