@@ -59,7 +59,7 @@ async function generateFile(destinationFolder: Folder, sourceFile: File, htmlTem
   const content = await sourceFile.read();
   const parsedContent = htmlTemplate.replace("{{body}}", content);
   const newFile = new File(`${destinationFolder.path}/${sourceFile.name}`);
-  await newFile.write(parsedContent);
+  await newFile.write(await parseLinks(parsedContent));
 }
 
 async function copyCSSFiles(bloggistaFolder: Folder): Promise<void> {
@@ -67,4 +67,17 @@ async function copyCSSFiles(bloggistaFolder: Folder): Promise<void> {
   const distFolder = new Folder(path.resolve(bloggistaFolder.path, 'dist'));
   const customCSSFile = new File(path.resolve(configFolder.path, 'custom.css'));
   await customCSSFile.copyTo(distFolder);
+}
+
+async function parseLinks(content: string): Promise<string> {
+  const regex = /{{link-to:(?<postId>([\w-])*)}}/g;
+  const links = content.matchAll(regex);
+  const postsRegistry = (await new Bloggista().config()).posts;
+
+  for (const link of links) {
+    const post = postsRegistry[link.groups?.postId!];
+    content = content.replace(link[0], `<a href="${post.relativePath}">${post.name}</a>`);
+  }
+
+  return content;
 }
