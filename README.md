@@ -17,7 +17,7 @@ Bloggista was developed using [NodeJS](https://nodejs.org/en/) version 14.19.2.
 
 ### Global installation
 
-Bloggista is a NPM library, which means it leaves in npmjs.com. It is also a CLI application, which means it consists of a set of commands that you can execute. The most common use for Bloggista is to install it globally.
+Bloggista is a NPM library, which means it lives in npmjs.com. It is also a CLI application, which means it consists of a set of commands that you can execute. The most common use for Bloggista is to install it globally.
 
 ```
 > npm install -g bloggista
