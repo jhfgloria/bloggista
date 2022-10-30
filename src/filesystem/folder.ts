@@ -4,7 +4,7 @@ import { File } from "./file";
 import { FileSystem, FileSystemException } from "./filesystem";
 
 export class Folder extends FileSystem {
-  private ROOT_FOLDER: string = '/' as const;
+  private ROOT_FOLDER = '/' as const;
 
   constructor(path: string) {
     super(path);
