@@ -15,7 +15,7 @@ interface BloggistaPost {
 }
 
 export class Bloggista {
-  public async findRootFolder(relativePath: string): Promise<Folder> {
+  static async findRootFolder(relativePath: string): Promise<Folder> {
     const baseFolder = new Folder(relativePath);
 
     if (await baseFolder.isRootFolder()) {
@@ -30,16 +30,16 @@ export class Bloggista {
     }
     
     const parentFolder = path.resolve(relativePath, "..")
-    return this.findRootFolder(parentFolder);
+    return Bloggista.findRootFolder(parentFolder);
   }
 
-  public async configFile(): Promise<File> {
-    const bloggistaRoot = await this.findRootFolder('.');
+  static async configFile(): Promise<File> {
+    const bloggistaRoot = await Bloggista.findRootFolder('.');
     return new File(path.resolve(bloggistaRoot.path, 'bloggista.json'));
   }
 
-  public async config(): Promise<BloogistaConfig> {
-    const bloggistaJSON = await this.configFile();
+  static async config(): Promise<BloogistaConfig> {
+    const bloggistaJSON = await Bloggista.configFile();
     const configuration = await bloggistaJSON.read();
     const JSONConfiguration = JSON.parse(configuration);
 

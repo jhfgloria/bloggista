@@ -4,9 +4,8 @@ import { File, Folder } from "./filesystem";
 
 export async function buildCommand(): Promise<void> {
   try {
-    const bloggista = new Bloggista();
     const rootFolder = "./";
-    const bloggistaRootFolder = await bloggista.findRootFolder(rootFolder);
+    const bloggistaRootFolder = await Bloggista.findRootFolder(rootFolder);
     
     await resetDistributionFolder(bloggistaRootFolder);
     
@@ -72,7 +71,7 @@ async function copyCSSFiles(bloggistaFolder: Folder): Promise<void> {
 async function parseLinks(content: string): Promise<string> {
   const regex = /{{link-to:(?<postId>([\w-])*)}}/g;
   const links = content.matchAll(regex);
-  const postsRegistry = (await new Bloggista().config()).posts;
+  const postsRegistry = (await Bloggista.config()).posts;
 
   for (const link of links) {
     const post = postsRegistry[link.groups?.postId!];

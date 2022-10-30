@@ -19,7 +19,7 @@ export class File extends FileSystem {
     throw new MissingFileException();
   }
 
-  public async write(data: string): Promise<void> {
+  public async write(data: Parameters<typeof fs.writeFile>["1"]): Promise<void> {
     console.log("Been here", this.path);
     await fs.writeFile(this.path, data);
   }

@@ -4,7 +4,7 @@ import { File, Folder } from "./filesystem";
 
 export async function createPostCommand(fileName: string, relativeContentFolder?: string) {
   try {
-    const bloggistaFolder = await (new Bloggista()).findRootFolder('.')
+    const bloggistaFolder = await Bloggista.findRootFolder('.')
     const contentFolder = new Folder(Path.resolve(bloggistaFolder.path, 'content'));
     
     if (relativeContentFolder) await createRecursiveFolders(contentFolder, relativeContentFolder);
@@ -14,8 +14,8 @@ export async function createPostCommand(fileName: string, relativeContentFolder?
     const file = new File(Path.resolve(contentFolder.path, relativeContentFolder || '', `${bloggistaFileName}.html`));
     
     await file.write('<h1>Title</h1>\n\n<p>Start editing here</p>');
-    const bloggistaConfig = await new Bloggista().config();
-    const bloggistaConfigFile = await new Bloggista().configFile();
+    const bloggistaConfig = await Bloggista.config();
+    const bloggistaConfigFile = await Bloggista.configFile();
 
     bloggistaConfig.posts[bloggistaFileName] = {
       id: bloggistaFileName,
