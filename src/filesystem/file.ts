@@ -19,8 +19,12 @@ export class File extends FileSystem {
     throw new MissingFileException();
   }
 
+  /**
+    * arguments:
+    * data: string | NodeJS.ArrayBufferView | Iterable<string | NodeJS.ArrayBufferView> |
+    *       AsyncIterable<string | NodeJS.ArrayBufferView> | Stream
+  **/
   public async write(data: Parameters<typeof fs.writeFile>["1"]): Promise<void> {
-    console.log("Been here", this.path);
     await fs.writeFile(this.path, data);
   }
 
