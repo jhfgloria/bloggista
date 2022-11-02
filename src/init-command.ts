@@ -30,6 +30,11 @@ export async function initCommand(name: string): Promise<void> {
     
     const packageJSONFile = new File(path.resolve(projectFolder.path + '/package.json'));
     await packageJSONFile.write(packageJSONTemplate(name));
+
+    const assetsFolder = new Folder(path.resolve(projectFolder.path  + '/assets'));
+    await assetsFolder.create();
+    const keepFile = new Folder(path.resolve(assetsFolder.path) + '/.keep');
+    await keepFile.create();
   } catch(error) {
     console.error('Error:', error);
     

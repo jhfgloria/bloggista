@@ -81,6 +81,7 @@ blog/
 |- config/
   |- index.html
   |- custom.css
+|- assets
 |- dist/
 |- node_modules/
 |- package.json
@@ -95,6 +96,10 @@ The content folder is where the actual blog posts will be. You SHOULD NOT create
 ### - `config`
 
 The config folder contains the necessary files to build the blog, namely the `index.html` file, which contains the HTML structure of all your pages, and the `custom.css` file, whiere you can create your own stylesheet (Bloggista does not impose any style).
+
+### - `assets`
+
+The assets folder contains the media assets that are going to be made available in your blog posts. Its contents are going to be copied into a homonymous folder inside the dist folder.
 
 ### - `dist`
 

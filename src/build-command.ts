@@ -16,6 +16,8 @@ export async function buildCommand(): Promise<void> {
     await generateBlogEntries(contentRootFolder, template);
     
     await copyCSSFiles(bloggistaRootFolder);
+
+    await copyMediaAssets(bloggistaRootFolder);
   } catch (error) {
     console.error('Error:', error);
   }
@@ -66,6 +68,17 @@ async function copyCSSFiles(bloggistaFolder: Folder): Promise<void> {
   const distFolder = new Folder(path.resolve(bloggistaFolder.path, 'dist'));
   const customCSSFile = new File(path.resolve(configFolder.path, 'custom.css'));
   await customCSSFile.copyTo(distFolder);
+}
+
+async function copyMediaAssets(bloggistaFolder: Folder): Promise<void> {
+  const assetsFolder = new Folder(path.resolve(bloggistaFolder.path, 'assets'));
+  
+  const distAssetsFolder = new Folder(path.resolve(bloggistaFolder.path, 'dist', 'assets'));
+  await distAssetsFolder.create();
+  
+  for (const file of await assetsFolder.getFiles()) {
+    file.copyTo(distAssetsFolder);
+  }
 }
 
 async function parseLinks(content: string): Promise<string> {
