@@ -1,6 +1,6 @@
 {
   "name": "bloggista",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Build and manage blogs tool",
   "main": "index.js",
   "scripts": {
@@ -16,7 +16,10 @@
     "Blogs",
     "Tools"
   ],
-  "author": "jhfgloria",
+  "contributors": [
+    "João Glória <jhfgloria@gmail.com> (https://github.com/jhfgloria)",
+    "Volodymyr Balytskyy <volodymyrbalytskyy@gmail.com> (https://github.com/volodymyrbalytskyy)"
+  ],
   "license": "ISC",
   "directories": {
     "example": "example",

@@ -116,4 +116,4 @@ This file is not important in case your only running Bloggista from your machine
 
 This JSON file is where all metadata about the blog is preserved. You can find there the name of your blog, given at `init` time, and the posts registry. The posts registry contains all information from posts created with `post`. You should not change this file (unless you know what you're doing!).
 
-Made with ♥️ by [@jhfgloria](https://github.com/jhfgloria)
+Made with ♥️
