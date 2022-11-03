@@ -13,7 +13,7 @@ export async function createPostCommand(fileName: string, relativeContentFolder?
     const bloggistaFileName = `${createdAt.replace(/[-.:TZ]/g, '')}-${fileName}`;
     const file = new File(Path.resolve(contentFolder.path, relativeContentFolder || '', `${bloggistaFileName}.html`));
     
-    await file.write('<h1>Title</h1>\n\n<p>Start editing here</p>');
+    await file.write(fileTemplate(bloggistaFileName));
     const bloggistaConfig = await Bloggista.config();
     const bloggistaConfigFile = await Bloggista.configFile();
 
@@ -45,4 +45,12 @@ async function createRecursiveFolders(root: Folder, path: string): Promise<void>
     new Folder(Path.resolve(root.path, levels[0])),
     levels.slice(1).join('/'),
   );
+}
+
+function fileTemplate(bloggistaFileName: string): string {
+  return (`<!-- Use the following to reference this post in other pages -->
+<!-- {{link-to:${bloggistaFileName}}} -->
+          
+<h1>Title</h1>
+<p>Start editing here</p>\n`);
 }

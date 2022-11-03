@@ -81,7 +81,7 @@ blog/
 |- config/
   |- index.html
   |- custom.css
-|- assets
+|- assets/
 |- dist/
 |- node_modules/
 |- package.json

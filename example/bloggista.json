@@ -18,6 +18,12 @@
       "name": "About Me",
       "relativePath": "/20221028185120899-about-me.html",
       "createdAt": "2022-10-28T18:51:20.899Z"
+    },
+    "20221103092126632-test-file-template": {
+      "id": "20221103092126632-test-file-template",
+      "name": "Test File Template",
+      "relativePath": "/tests/20221103092126632-test-file-template.html",
+      "createdAt": "2022-11-03T09:21:26.632Z"
     }
   }
 }
