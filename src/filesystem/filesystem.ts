@@ -1,5 +1,5 @@
 import Path from "path";
-import fs from "fs/promises";
+import fs from "fs";
 
 export abstract class FileSystem {
   private _exists?: boolean = undefined;
@@ -8,16 +8,15 @@ export abstract class FileSystem {
 
   get name() { return Path.basename(this.path); }
 
-  public async exists(): Promise<boolean> {
+  public exists(): boolean {
     if (this._exists !== undefined) return this._exists;
 
     try {
-      await fs.stat(this.path);
-
-      return true;
-    } catch (error) {
-      console.error(error);
-      
+      if (fs.existsSync(this.path)) {
+        return true;
+      }
+      return false;
+    } catch (_) {
       return false;
     }
   }
