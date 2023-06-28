@@ -65,11 +65,15 @@ The `post` command creates a post under a given `path`. If no path is provided t
 
 ### - `build`
 
-The `build` command is the backbone of Bloggista. It is what allows all your HTML files to be compiled into a beautiful blog. The results of the build will be available `/dist`.
+The `build` command is the backbone of Bloggista. It is what allows all your HTML files to be compiled into a beautiful blog. The results of the build will be available in the `/dist` folder. In case you want bloggista to keep watching your changes and build accordingly, run it with `--watch` option.
 
 ```
-> bloggista build
+> bloggista build --watch
 ```
+
+### - `--help`
+
+Any command can be run with the `--help` option (including `bloggista --help`) which will prompt an explanation of the command.
 
 # Structure
 
