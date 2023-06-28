@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { Command } from "commander";
+import chokidar from "chokidar";
 
 import * as Package from "./package.json";
 import { buildCommand } from "./src/build-command";
@@ -20,12 +21,24 @@ program.command('init')
 
 program.command('post')
        .argument('<name>', 'Name of the blog post (can\'t contain spaces)')
-       .option('-p, --path <filePath>')
-       .description('Creates a blog post under a folder if one is given')
+       .option('-p, --path <filePath>', 'path under which post is stored (path can be recursive)')
+       .description('Creates a blog post')
        .action((name, { path }) => createPostCommand(name, path));
 
 program.command('build')
+       .option('-w, --watch', 'keeps build command running', false)
        .description('Builds the entire blog structure into the dist folder')
-       .action(buildCommand);
+       .action(({ watch }) => {
+        buildCommand();
+
+        if (watch) {
+          const watcher = chokidar.watch(['./content', './config'], {
+            ignored: /(^|[\/\\])\../,
+            persistent: true
+          });
+          console.log("Building your blog in watch mode");
+          watcher.on("change", () => buildCommand());
+        }
+      });
 
 program.parse();
