@@ -4,6 +4,7 @@ import { File, Folder } from "./filesystem";
 
 export async function buildCommand(): Promise<void> {
   try {
+    console.time('Build time');
     const rootFolder = "./";
     const bloggistaRootFolder = await Bloggista.findRootFolder(rootFolder);
     
@@ -18,6 +19,8 @@ export async function buildCommand(): Promise<void> {
     await copyCSSFiles(bloggistaRootFolder);
 
     await copyMediaAssets(bloggistaRootFolder);
+
+    console.timeEnd('Build time');
   } catch (error) {
     console.error('Error:', error);
   }
@@ -30,7 +33,7 @@ async function resetDistributionFolder(bloggistaFolder: Folder): Promise<void> {
   if (await distributionFolder.exists()) {
     await distributionFolder.remove();
   } else {
-    console.log("/dist folder does not exist yet");
+    console.log("Creating dist/ from scratch");
   }
   
   await distributionFolder.create();
