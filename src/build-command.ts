@@ -30,7 +30,7 @@ async function resetDistributionFolder(bloggistaFolder: Folder): Promise<void> {
   const distributionPath = path.resolve(bloggistaFolder.path) + "/dist";
   const distributionFolder = new Folder(distributionPath);
 
-  if (await distributionFolder.exists()) {
+  if (distributionFolder.exists()) {
     await distributionFolder.remove();
   } else {
     console.log("Creating dist/ from scratch");
@@ -48,7 +48,7 @@ async function generateBlogEntries(bloggistaContentRootFolder: Folder, htmlTempl
   const currentDistribuitonPath = bloggistaContentRootFolder.path.replace("/content", "/dist");
   const currentDistribuitonFolder = new Folder(currentDistribuitonPath);
   
-  if (!await currentDistribuitonFolder.exists()) {
+  if (!currentDistribuitonFolder.exists()) {
     currentDistribuitonFolder.create();
   }
 
@@ -63,7 +63,7 @@ async function generateFile(destinationFolder: Folder, sourceFile: File, htmlTem
   const content = await sourceFile.read();
   const parsedContent = htmlTemplate.replace("{{body}}", content);
   const newFile = new File(`${destinationFolder.path}/${sourceFile.name}`);
-  await newFile.write(await parseLinks(parsedContent));
+  await newFile.write(await parseLinks(await parseLinkBlocks(parsedContent)));
 }
 
 async function copyCSSFiles(bloggistaFolder: Folder): Promise<void> {
@@ -82,6 +82,26 @@ async function copyMediaAssets(bloggistaFolder: Folder): Promise<void> {
   for (const file of await assetsFolder.getFiles()) {
     file.copyTo(distAssetsFolder);
   }
+}
+
+async function parseLinkBlocks(content: string): Promise<string> {
+  const startRegex = /{{link-to:(?<postId>([\w-])*) do}}/g;
+  const openLinkTags = content.matchAll(startRegex);
+  const postsRegistry = (await Bloggista.config()).posts;
+
+  for (const link of openLinkTags) {
+    const post = postsRegistry[link.groups?.postId!];
+    content = content.replace(link[0], `<a href="${post.relativePath}">`);
+  }
+
+  const endRegex = /{{link-to:(?<postId>([\w-])*) end}}/g;
+  const closingLinkTags = content.matchAll(endRegex);
+  
+  for (const link of closingLinkTags) {
+    content = content.replace(link[0], '</a>');
+  }
+
+  return content;
 }
 
 async function parseLinks(content: string): Promise<string> {

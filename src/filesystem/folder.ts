@@ -11,7 +11,7 @@ export class Folder extends FileSystem {
   }
 
   public async remove(): Promise<void> {
-    if (await this.exists()) {
+    if (this.exists()) {
       await fs.rmdir(this.path, { recursive: true });
     } else {
       throw new MissingFolderException();
@@ -19,14 +19,14 @@ export class Folder extends FileSystem {
   }
 
   public async create(): Promise<void> {
-    if (await this.exists()) {
+    if (this.exists()) {
       throw new AlreadyExistsFolderException();
     }
     await fs.mkdir(this.path);
   }
 
   public async isRootFolder(): Promise<boolean> {
-    if (await this.exists()) {
+    if (this.exists()) {
       return this.path === this.ROOT_FOLDER;
     }
     return false;

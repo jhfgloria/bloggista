@@ -25,7 +25,7 @@ export class Bloggista {
     const pathToCheck = path.resolve(relativePath) + "/bloggista.json";
     const folderToCheck = new Folder(pathToCheck);
 
-    if (await folderToCheck.exists()) {
+    if (folderToCheck.exists()) {
       return new Folder(relativePath);
     }
     

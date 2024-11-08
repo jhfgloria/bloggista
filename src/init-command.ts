@@ -65,14 +65,14 @@ const HTMLTemplate = (name: string) => `<!DOCTYPE html>
   </head>
 
   <body>
-    <div id="header">{{header}}</div>
-    <div id="content">{{body}}</div>
+    <div id="header"><!-- Your header goes here --></div>
+    <div id="content">{{body}}<!-- Don't replace this tag!! --></div>
     <p id="footer">${name} ♥️ 2022</p>
   </body>
 </html>
 `;
 
-const customCSSTemplate = `/** You're custom styles go in here **/`;
+const customCSSTemplate = `/** Your custom styles go in here **/`;
 
 const exampleHTMLTemplate = `<p>Start editing here</p>`;
 

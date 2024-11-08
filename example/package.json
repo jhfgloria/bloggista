@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "dependencies": {
-    "bloggista": "^0.4.2"
+    "bloggista": "^0.4.2",
+    "superstatic": "^9.0.3"
   }
 }
